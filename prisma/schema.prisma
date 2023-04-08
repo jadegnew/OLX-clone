@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id Int @default(autoincrement()) @id
+  email String @unique
+  phone String @unique
+  password String
+  name String
+  salePosts SalePost[]
+  refreshTokens RefreshToken[]
+  whitelistIP WhitelistIP[]
+}
+
+model RefreshToken {
+  id Int @default(autoincrement()) @id
+  userId Int
+  User User @relation(fields: [userId], references: [id])
+  refreshToken String
+}
+
+model WhitelistIP {
+  id Int @default(autoincrement()) @id
+  userId Int
+  User User @relation(fields: [userId], references: [id])
+  ip String
+}
+
+model SalePost {
+  id Int @default(autoincrement()) @id
+  userId Int
+  User User @relation(fields: [userId], references: [id])
+  title String @db.VarChar(100)
+  description String
+  //TODO add photos and price
+  //TODO add popularity 
+  //TODO add tags
+  location String @db.VarChar(100)
+  phone String
+}
