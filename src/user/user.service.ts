@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { UserRegisterDto } from 'src/user/dto/user-register.dto';
 import { UserEntity } from './entities/user.entity';
+import { compare } from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -92,13 +93,12 @@ export class UserService {
         userId: user.id,
       },
     });
-    let isValid: boolean;
-    tokens.map((t) => {
-      //TODO add bcrypt
-      if (t.refreshToken === tokenFromCookie) {
-        isValid = true;
+    tokens.map(async (t) => {
+      const isValid = await compare(t.refreshToken, tokenFromCookie);
+      if (isValid) {
+        return user;
       }
     });
-    return user;
+    return null;
   }
 }

@@ -18,8 +18,10 @@ export class AuthService {
   ) {}
 
   async register(userData: UserRegisterDto) {
-    // TODO change salt to SALT var from .env
-    const passwordHash = await hash(userData.password, 10);
+    const passwordHash = await hash(
+      userData.password,
+      +this.congifService.get('SALT'),
+    );
     userData.password = passwordHash;
     const createdUser = await this.userService.register(userData);
     return createdUser;
@@ -57,14 +59,14 @@ export class AuthService {
       userId,
       iat,
     };
-    //TODO add encryption for refresh tokens
     const token = await this.jwtService.signAsync(payload, {
       secret: this.congifService.get('JWT_REFRESH_SECRET'),
       expiresIn: '30d',
     });
+    const tokenHash = await hash(token, +this.congifService.get('SALT'));
     const cookie = `Refresh=${token}; HttpOnly; Path=/; Max-Age=30d`;
     return {
-      token,
+      tokenHash,
       cookie,
     };
   }

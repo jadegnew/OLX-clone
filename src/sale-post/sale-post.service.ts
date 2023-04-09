@@ -31,10 +31,13 @@ export class SalePostService {
     });
   }
 
+  //TODO rewrite logic. mb elastic search?
   async findByTitle(title: string) {
     return this.prismaService.salePost.findMany({
       where: {
-        title,
+        title: {
+          contains: title,
+        },
       },
     });
   }

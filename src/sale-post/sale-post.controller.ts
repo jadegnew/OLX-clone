@@ -39,7 +39,7 @@ export class SalePostController {
   }
 
   @Get('s/:title')
-  async findByTitle(@Param('id') title: string) {
+  async findByTitle(@Param('title') title: string) {
     return this.salePostService.findByTitle(title);
   }
 
