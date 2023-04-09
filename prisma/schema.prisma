@@ -39,6 +39,9 @@ model SalePost {
   User User @relation(fields: [userId], references: [id])
   title String @db.VarChar(100)
   description String
+  price Int //price in USD
+  viewsCount Int
+  imageUrls String[]
   //TODO add photos and price
   //TODO add popularity 
   //TODO add tags

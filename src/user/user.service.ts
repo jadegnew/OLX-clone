@@ -93,12 +93,12 @@ export class UserService {
         userId: user.id,
       },
     });
-    tokens.map(async (t) => {
-      const isValid = await compare(t.refreshToken, tokenFromCookie);
+    let isValid: boolean;
+    for (let i = 0; i < tokens.length; i++) {
+      isValid = await compare(tokenFromCookie, tokens[i].refreshToken);
       if (isValid) {
         return user;
       }
-    });
-    return null;
+    }
   }
 }

@@ -27,7 +27,7 @@ export class AuthController {
     if (user) {
       const accessToken = await this.authService.getAccessToken(user.id);
       const refreshToken = await this.authService.getRefreshToken(user.id);
-      await this.userService.saveRefreshAndIP(user.id, refreshToken.token);
+      await this.userService.saveRefreshAndIP(user.id, refreshToken.tokenHash);
       req.res?.setHeader('Set-Cookie', [accessToken, refreshToken.cookie]);
       return user;
     }
@@ -42,7 +42,7 @@ export class AuthController {
     const user = req.user;
     const accessToken = await this.authService.getAccessToken(user.id);
     const refreshToken = await this.authService.getRefreshToken(user.id);
-    await this.userService.saveRefreshAndIP(user.id, refreshToken.token);
+    await this.userService.saveRefreshAndIP(user.id, refreshToken.tokenHash);
     req.res?.setHeader('Set-Cookie', [accessToken, refreshToken.cookie]);
     return user;
   }
