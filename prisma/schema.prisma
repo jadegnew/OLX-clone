@@ -39,9 +39,17 @@ model SalePost {
   User User @relation(fields: [userId], references: [id])
   title String @db.VarChar(100)
   description String
-  //TODO add photos and price
-  //TODO add popularity 
+  price Int //price in USD
+  viewsCount Int @default(0)
+  imageUrl String? //TODO make array 
   //TODO add tags
   location String @db.VarChar(100)
   phone String
 }
+
+// model ImageUrls {
+//   id Int @default(autoincrement()) @id
+//   postId Int
+//   SalePost SalePost @relation(fields: [postId], references: [id])
+//   url String
+// }

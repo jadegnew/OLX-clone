@@ -9,11 +9,20 @@ export class SalePostService {
   //TODO add lazy loading to fetch request
   //TODO complete requests
   //TODO add error handling
+  //TODO add image handling
 
-  async create(createSalePostDto: CreateSalePostDto, userId: number) {
+  async create(
+    { title, description, location, price, phone }: CreateSalePostDto,
+    userId: number,
+    file?: Express.Multer.File,
+  ) {
     return this.prismaService.salePost.create({
       data: {
-        ...createSalePostDto,
+        title,
+        description,
+        location,
+        price,
+        phone,
         userId,
       },
     });
@@ -24,9 +33,14 @@ export class SalePostService {
   }
 
   async findOne(id: number) {
-    return this.prismaService.salePost.findFirst({
+    return this.prismaService.salePost.update({
       where: {
         id,
+      },
+      data: {
+        viewsCount: {
+          increment: 1,
+        },
       },
     });
   }

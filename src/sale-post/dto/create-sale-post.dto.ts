@@ -3,4 +3,6 @@ export class CreateSalePostDto {
   description: string;
   location: string;
   phone: string;
+  price: number;
+  imageUrl?: string;
 }
