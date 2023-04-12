@@ -3,7 +3,7 @@ import { UserService } from './user.service';
 import { AccessAuthenticationGuard } from 'src/auth/AccessStrategy/access.guard';
 import RequestWithUser from 'src/interfaces/requestWithUser.interface';
 
-@Controller('')
+@Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

@@ -18,13 +18,21 @@ export class AuthService {
   ) {}
 
   async register(userData: UserRegisterDto) {
-    const passwordHash = await hash(
-      userData.password,
-      +this.congifService.get('SALT'),
-    );
-    userData.password = passwordHash;
-    const createdUser = await this.userService.register(userData);
-    return createdUser;
+    try {
+      const passwordHash = await hash(
+        userData.password,
+        +this.congifService.get('SALT'),
+      );
+      userData.password = passwordHash;
+      const createdUser = await this.userService.register(userData);
+      return createdUser;
+    } catch (error) {
+      throw new HttpException(
+        //TODO make normal exceptions
+        'Error while creating user',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   async login(userData: UserLoginDto) {

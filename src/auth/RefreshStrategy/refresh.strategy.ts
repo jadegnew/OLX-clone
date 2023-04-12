@@ -22,7 +22,6 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
       passReqToCallback: true,
     });
   }
-  //TODO find how it gets payload
   async validate(request: Request, payload: TokenPayload) {
     const refreshToken: string = request?.cookies?.Refresh;
     return this.userService.checkRefresh(payload.userId, refreshToken);

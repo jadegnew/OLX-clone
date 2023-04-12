@@ -6,10 +6,9 @@ import { PrismaService } from 'src/database/prisma.service';
 @Injectable()
 export class SalePostService {
   constructor(private readonly prismaService: PrismaService) {}
-  //TODO add lazy loading to fetch request
   //TODO complete requests
   //TODO add error handling
-  //TODO add image handling
+  //TODO add receiving and saving images
 
   async create(
     { title, description, location, price, phone }: CreateSalePostDto,
@@ -45,7 +44,7 @@ export class SalePostService {
     });
   }
 
-  //TODO rewrite logic. mb elastic search?
+  //TODO rewrite logic. mb elastic search || full text search in db?
   async findByTitle(title: string) {
     return this.prismaService.salePost.findMany({
       where: {

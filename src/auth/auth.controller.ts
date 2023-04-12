@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Get,
+  Post,
+  Req,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { UserRegisterDto } from 'src/user/dto/user-register.dto';
 import { AuthService } from './auth.service';
 import { LocalAuthenticationGuard } from './LocalStrategy/localAuth.guard';
@@ -14,14 +23,8 @@ export class AuthController {
     private readonly userService: UserService,
   ) {}
 
-  @UseGuards(AccessAuthenticationGuard)
-  @Get('test')
-  test() {
-    console.log('test');
-    return 'success';
-  }
-
   @Post('register')
+  // @UseInterceptors(ClassSerializerInterceptor)
   async register(@Body() body: UserRegisterDto, @Req() req: RequestWithUser) {
     const user = await this.authService.register(body);
     if (user) {
@@ -31,11 +34,11 @@ export class AuthController {
       req.res?.setHeader('Set-Cookie', [accessToken, refreshToken.cookie]);
       return user;
     }
-    //TODO remake return
     return null;
   }
 
   @UseGuards(LocalAuthenticationGuard)
+  // @UseInterceptors(ClassSerializerInterceptor)
   @Post('login')
   async login(@Req() req: RequestWithUser) {
     //TODO get IP address and save it in db
