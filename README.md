@@ -16,6 +16,7 @@ Development in progress, functionality will be added over time.
 
 ```mermaid
 graph TD;
+    /-->/api;
     /-->/user;
     /-->/auth;
     /-->/sale-post;
@@ -31,6 +32,10 @@ graph TD;
     /s-->:id_'GET'
     /s-->:title_'GET'
 ```
+
+### Swagger API
+
+- `@GET` /api
 
 ### Auth
 

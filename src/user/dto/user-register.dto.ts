@@ -1,5 +1,4 @@
 import { IsEmail, IsString, MinLength } from 'class-validator';
-
 export class UserRegisterDto {
   @IsEmail()
   email: string;
@@ -16,5 +15,3 @@ export class UserRegisterDto {
   @MinLength(8)
   password: string;
 }
-
-// TODO add validation

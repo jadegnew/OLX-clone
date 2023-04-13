@@ -1,20 +1,21 @@
 import {
   Body,
-  ClassSerializerInterceptor,
   Controller,
   Get,
   Post,
   Req,
   UseGuards,
-  UseInterceptors,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UserRegisterDto } from 'src/user/dto/user-register.dto';
 import { AuthService } from './auth.service';
 import { LocalAuthenticationGuard } from './LocalStrategy/localAuth.guard';
 import RequestWithUser from 'src/interfaces/requestWithUser.interface';
-import { AccessAuthenticationGuard } from './AccessStrategy/access.guard';
 import { UserService } from 'src/user/user.service';
 import { RefreshAuthenticationGuard } from './RefreshStrategy/refresh.guard';
+import { UserEntity } from '../user/entities/user.entity';
+import { User } from '@prisma/client';
 
 @Controller('auth')
 export class AuthController {
@@ -24,8 +25,11 @@ export class AuthController {
   ) {}
 
   @Post('register')
-  // @UseInterceptors(ClassSerializerInterceptor)
-  async register(@Body() body: UserRegisterDto, @Req() req: RequestWithUser) {
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async register(
+    @Body() body: UserRegisterDto,
+    @Req() req: RequestWithUser,
+  ): Promise<UserEntity | null> {
     const user = await this.authService.register(body);
     if (user) {
       const accessToken = await this.authService.getAccessToken(user.id);
@@ -37,10 +41,10 @@ export class AuthController {
     return null;
   }
 
-  @UseGuards(LocalAuthenticationGuard)
-  // @UseInterceptors(ClassSerializerInterceptor)
   @Post('login')
-  async login(@Req() req: RequestWithUser) {
+  @UsePipes(new ValidationPipe({ transform: true }))
+  @UseGuards(LocalAuthenticationGuard)
+  async login(@Req() req: RequestWithUser): Promise<User> {
     //TODO get IP address and save it in db
     const user = req.user;
     const accessToken = await this.authService.getAccessToken(user.id);
@@ -52,7 +56,7 @@ export class AuthController {
 
   @UseGuards(RefreshAuthenticationGuard)
   @Get('refresh')
-  async refresh(@Req() request: RequestWithUser) {
+  async refresh(@Req() request: RequestWithUser): Promise<User> {
     const accessCookie = await this.authService.getAccessToken(request.user.id);
     request.res?.setHeader('Set-Cookie', accessCookie);
     return request.user;
