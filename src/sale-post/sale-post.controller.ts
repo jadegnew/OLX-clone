@@ -37,18 +37,15 @@ export class SalePostController {
     return this.salePostService.findAll();
   }
 
-  @Get(':search')
-  async find(@Param('search') search: string | number) {
-    if (typeof search === 'string') {
-      return this.salePostService.findByTitle(search);
-    }
-    return this.salePostService.findOne(+search);
+  @Get(':id')
+  async findOn(@Param('id') id: string) {
+    return this.salePostService.findOne(+id);
   }
 
-  // @Get('s/:title')
-  // async findByTitle(@Param('title') title: string) {
-  //   return this.salePostService.findByTitle(title);
-  // }
+  @Get('s/:title')
+  async findByTitle(@Param('title') title: string) {
+    return this.salePostService.findByTitle(title);
+  }
 
   @Patch('update/:id')
   async update(
