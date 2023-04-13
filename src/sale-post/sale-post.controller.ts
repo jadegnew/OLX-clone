@@ -15,8 +15,10 @@ import { CreateSalePostDto } from './dto/create-sale-post.dto';
 import { UpdateSalePostDto } from './dto/update-sale-post.dto';
 import RequestWithUser from 'src/interfaces/requestWithUser.interface';
 import { AccessAuthenticationGuard } from 'src/auth/AccessStrategy/access.guard';
+import { ApiTags } from '@nestjs/swagger';
 
 //TODO save files in folder
+@ApiTags('SalePost')
 @Controller('sale-post')
 export class SalePostController {
   constructor(private readonly salePostService: SalePostService) {}
@@ -35,15 +37,18 @@ export class SalePostController {
     return this.salePostService.findAll();
   }
 
-  @Get('s/:id')
-  async findOne(@Param('id') id: string) {
-    return this.salePostService.findOne(+id);
+  @Get(':search')
+  async find(@Param('search') search: string | number) {
+    if (typeof search === 'string') {
+      return this.salePostService.findByTitle(search);
+    }
+    return this.salePostService.findOne(+search);
   }
 
-  @Get('s/:title')
-  async findByTitle(@Param('title') title: string) {
-    return this.salePostService.findByTitle(title);
-  }
+  // @Get('s/:title')
+  // async findByTitle(@Param('title') title: string) {
+  //   return this.salePostService.findByTitle(title);
+  // }
 
   @Patch('update/:id')
   async update(

@@ -2,7 +2,9 @@ import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AccessAuthenticationGuard } from 'src/auth/AccessStrategy/access.guard';
 import RequestWithUser from 'src/interfaces/requestWithUser.interface';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('User')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}

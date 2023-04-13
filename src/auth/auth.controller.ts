@@ -16,7 +16,10 @@ import { UserService } from 'src/user/user.service';
 import { RefreshAuthenticationGuard } from './RefreshStrategy/refresh.guard';
 import { UserEntity } from '../user/entities/user.entity';
 import { User } from '@prisma/client';
+import { UserLoginDto } from '../user/dto/user-login.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -44,7 +47,10 @@ export class AuthController {
   @Post('login')
   @UsePipes(new ValidationPipe({ transform: true }))
   @UseGuards(LocalAuthenticationGuard)
-  async login(@Req() req: RequestWithUser): Promise<User> {
+  async login(
+    @Req() req: RequestWithUser,
+    @Body() body: UserLoginDto,
+  ): Promise<User> {
     //TODO get IP address and save it in db
     const user = req.user;
     const accessToken = await this.authService.getAccessToken(user.id);

@@ -28,9 +28,9 @@ graph TD;
     /sale-post-->/create_'POST'
     /sale-post-->/update:id_'PATCH'
     /sale-post-->/delete:id_'DELETE'
-    /sale-post-->/s
-    /s-->:id_'GET'
-    /s-->:title_'GET'
+    /sale-post-->/search_'GET'/:search
+    /search-->:id_'GET'
+    /search-->:title_'GET'
 ```
 
 ### Swagger API
