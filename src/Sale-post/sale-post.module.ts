@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { SalePostService } from './sale-post.service';
 import { SalePostController } from './sale-post.controller';
-import { PrismaService } from 'src/database/prisma.service';
-import { AccessStrategy } from 'src/auth/AccessStrategy/access.strategy';
+import { PrismaService } from 'src/Database/prisma.service';
+import { AccessStrategy } from 'src/Auth/Strategies/AccessStrategy/access.strategy';
 import { ConfigModule } from '@nestjs/config';
-import { UserService } from 'src/user/user.service';
-import { Logger } from '../logger/logger.service';
+import { GetUserProfileService } from 'src/User/GetUserProfile/GetUserProfile.service';
+import { Logger } from '../Logger/Logger.service';
+import { UserService } from '../User/User/User.service';
 
 @Module({
   imports: [ConfigModule],
@@ -14,8 +15,9 @@ import { Logger } from '../logger/logger.service';
     SalePostService,
     PrismaService,
     AccessStrategy,
-    UserService,
+    GetUserProfileService,
     Logger,
+    UserService,
   ],
 })
 export class SalePostModule {}

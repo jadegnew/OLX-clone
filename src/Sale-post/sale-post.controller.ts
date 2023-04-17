@@ -11,15 +11,15 @@ import {
   UploadedFile,
 } from '@nestjs/common';
 import { SalePostService } from './sale-post.service';
-import { CreateSalePostDto } from './dto/create-sale-post.dto';
-import { UpdateSalePostDto } from './dto/update-sale-post.dto';
-import RequestWithUser from 'src/interfaces/requestWithUser.interface';
-import { AccessAuthenticationGuard } from 'src/auth/AccessStrategy/access.guard';
+import { CreateSalePostDto } from './DTOS/create-sale-post.dto';
+import { UpdateSalePostDto } from './DTOS/update-sale-post.dto';
+import RequestWithUser from 'src/Interfaces/requestWithUser.interface';
+import { AccessAuthenticationGuard } from 'src/Auth/Strategies/AccessStrategy/access.guard';
 import { ApiTags } from '@nestjs/swagger';
 
 //TODO save files in folder
 @ApiTags('SalePost')
-@Controller('sale-post')
+@Controller('Sale-post')
 export class SalePostController {
   constructor(private readonly salePostService: SalePostService) {}
   @Post('create')

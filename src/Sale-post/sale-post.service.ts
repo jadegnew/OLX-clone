@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSalePostDto } from './dto/create-sale-post.dto';
-import { UpdateSalePostDto } from './dto/update-sale-post.dto';
-import { PrismaService } from 'src/database/prisma.service';
-import { Logger } from '../logger/logger.service';
+import { CreateSalePostDto } from './DTOS/create-sale-post.dto';
+import { UpdateSalePostDto } from './DTOS/update-sale-post.dto';
+import { PrismaService } from 'src/Database/prisma.service';
+import { Logger } from '../Logger/Logger.service';
 
 @Injectable()
 export class SalePostService {

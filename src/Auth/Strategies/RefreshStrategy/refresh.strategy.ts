@@ -3,14 +3,14 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { TokenPayload } from 'src/interfaces/token.payload.interface';
-import { UserService } from 'src/user/user.service';
+import { TokenPayload } from 'src/Interfaces/token.payload.interface';
+import { RefreshUserTokenService } from '../../../User/RefresfUserToken/RefreshUserToken.service';
 
 @Injectable()
 export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
   constructor(
     private readonly configService: ConfigService,
-    private readonly userService: UserService,
+    private readonly refreshUserTokenService: RefreshUserTokenService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
@@ -24,6 +24,9 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
   }
   async validate(request: Request, payload: TokenPayload) {
     const refreshToken: string = request?.cookies?.Refresh;
-    return this.userService.checkRefresh(payload.userId, refreshToken);
+    return this.refreshUserTokenService.checkRefresh(
+      payload.userId,
+      refreshToken,
+    );
   }
 }
