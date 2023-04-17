@@ -8,11 +8,11 @@ import { compare } from 'bcrypt';
 export class AuthLoginService {
   constructor(
     private readonly logger: Logger,
-    private readonly loginUserService: UserService,
+    private readonly userService: UserService,
   ) {}
   async login(userData: UserDto) {
     try {
-      const user = await this.loginUserService.getByEmail(userData.email);
+      const user = await this.userService.getByEmail(userData.email);
       await this.verifyPassword(userData.password, user!.password);
       this.logger.log(`User ${user.email} logged in.`, 'AuthService');
       return user;
