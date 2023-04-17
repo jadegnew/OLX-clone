@@ -18,4 +18,3 @@ async function bootstrap() {
   await app.listen(3000);
 }
 bootstrap();
-//TODO сделать улучшения от людей с тг

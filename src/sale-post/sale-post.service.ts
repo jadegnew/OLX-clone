@@ -2,10 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { CreateSalePostDto } from './dto/create-sale-post.dto';
 import { UpdateSalePostDto } from './dto/update-sale-post.dto';
 import { PrismaService } from 'src/database/prisma.service';
+import { Logger } from '../logger/logger.service';
 
 @Injectable()
 export class SalePostService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly logger: Logger,
+  ) {}
   //TODO complete requests
   //TODO add error handling
   //TODO add receiving and saving images
@@ -15,16 +19,22 @@ export class SalePostService {
     userId: number,
     file?: Express.Multer.File,
   ) {
-    return this.prismaService.salePost.create({
-      data: {
-        title,
-        description,
-        location,
-        price,
-        phone,
-        userId,
-      },
-    });
+    try {
+      const salepost = await this.prismaService.salePost.create({
+        data: {
+          title,
+          description,
+          location,
+          price,
+          phone,
+          userId,
+        },
+      });
+      this.logger.log(`SalePost with id ${salepost.id} created`);
+      return salepost;
+    } catch (e) {
+      this.logger.error('Error while creating salepost', e);
+    }
   }
 
   async findAll() {
@@ -56,21 +66,33 @@ export class SalePostService {
   }
 
   async update(id: number, updateSalePostDto: UpdateSalePostDto) {
-    return this.prismaService.salePost.update({
-      where: {
-        id,
-      },
-      data: {
-        ...updateSalePostDto,
-      },
-    });
+    try {
+      const updatedPost = await this.prismaService.salePost.update({
+        where: {
+          id,
+        },
+        data: {
+          ...updateSalePostDto,
+        },
+      });
+      this.logger.log(`SalePost with id ${updatedPost.id} updated`);
+      return updatedPost;
+    } catch (e) {
+      this.logger.error('Error while updating salepost', e);
+    }
   }
 
   async remove(id: number) {
-    return this.prismaService.salePost.delete({
-      where: {
-        id,
-      },
-    });
+    try {
+      const deletedPost = await this.prismaService.salePost.delete({
+        where: {
+          id,
+        },
+      });
+      this.logger.log(`SalePost with id ${deletedPost.id} deleted`);
+      return deletedPost;
+    } catch (e) {
+      this.logger.error('Error while deleting salepost', e);
+    }
   }
 }

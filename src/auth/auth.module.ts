@@ -8,6 +8,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { AccessStrategy } from './AccessStrategy/access.strategy';
 import { RefreshStrategy } from './RefreshStrategy/refresh.strategy';
+import { Logger } from '../logger/logger.service';
 //TODO add mail / phone verification
 
 @Module({
@@ -26,6 +27,7 @@ import { RefreshStrategy } from './RefreshStrategy/refresh.strategy';
   ],
   controllers: [AuthController],
   providers: [
+    Logger,
     AuthService,
     UserService,
     PrismaService,

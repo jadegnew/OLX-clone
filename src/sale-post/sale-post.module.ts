@@ -5,10 +5,17 @@ import { PrismaService } from 'src/database/prisma.service';
 import { AccessStrategy } from 'src/auth/AccessStrategy/access.strategy';
 import { ConfigModule } from '@nestjs/config';
 import { UserService } from 'src/user/user.service';
+import { Logger } from '../logger/logger.service';
 
 @Module({
   imports: [ConfigModule],
   controllers: [SalePostController],
-  providers: [SalePostService, PrismaService, AccessStrategy, UserService],
+  providers: [
+    SalePostService,
+    PrismaService,
+    AccessStrategy,
+    UserService,
+    Logger,
+  ],
 })
 export class SalePostModule {}

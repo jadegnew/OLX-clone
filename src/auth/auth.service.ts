@@ -7,6 +7,7 @@ import { UserLoginDto } from 'src/user/dto/user-login.dto';
 import { TokenPayload } from 'src/interfaces/token.payload.interface';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { Logger } from '../logger/logger.service';
 
 @Injectable()
 export class AuthService {
@@ -15,6 +16,7 @@ export class AuthService {
     private readonly prismaService: PrismaService,
     private readonly jwtService: JwtService,
     private readonly congifService: ConfigService,
+    private readonly logger: Logger,
   ) {}
 
   async register(userData: UserRegisterDto) {
@@ -25,8 +27,10 @@ export class AuthService {
       );
       userData.password = passwordHash;
       const createdUser = await this.userService.register(userData);
+      this.logger.log(`New user ${createdUser?.email} created.`, 'AuthService');
       return createdUser;
     } catch (error) {
+      this.logger.error('Error while creating user', 'AuthService');
       throw new HttpException(
         //TODO make normal exceptions
         'Error while creating user',
@@ -39,8 +43,10 @@ export class AuthService {
     try {
       const user = await this.userService.getByEmail(userData.email);
       await this.verifyPassword(userData.password, user!.password);
+      this.logger.log(`User ${user.email} logged in.`, 'AuthService');
       return user;
     } catch (error) {
+      this.logger.error('Error while logining.', 'AuthService');
       throw new HttpException(
         'Wrong email or password',
         HttpStatus.BAD_REQUEST,
@@ -58,6 +64,7 @@ export class AuthService {
       secret: this.congifService.get('JWT_ACCESS_SECRET'),
       expiresIn: '15m',
     });
+    this.logger.log(`Access token created for user ${userId}.`, 'AuthService');
     return `Authentication=${token}; HttpOnly; Path=/; Max-Age=15m`;
   }
 
@@ -73,6 +80,7 @@ export class AuthService {
     });
     const tokenHash = await hash(token, +this.congifService.get('SALT'));
     const cookie = `Refresh=${token}; HttpOnly; Path=/; Max-Age=30d`;
+    this.logger.log('Refresh token created.', 'AuthService');
     return {
       tokenHash,
       cookie,
