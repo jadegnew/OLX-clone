@@ -16,6 +16,7 @@ import { UpdateSalePostDto } from './DTOS/update-sale-post.dto';
 import RequestWithUser from 'src/Interfaces/requestWithUser.interface';
 import { AccessAuthenticationGuard } from 'src/Auth/Strategies/AccessStrategy/access.guard';
 import { ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
 
 //TODO save files in folder
 @ApiTags('SalePost')
@@ -33,7 +34,7 @@ export class SalePostController {
   }
 
   @Get('all')
-  async findAll() {
+  async findAll(@Req() req: Request) {
     return this.salePostService.findAll();
   }
 

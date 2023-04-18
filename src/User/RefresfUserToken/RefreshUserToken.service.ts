@@ -10,38 +10,54 @@ export class RefreshUserTokenService {
     private readonly userService: UserService,
   ) {}
 
-  async saveRefreshAndIP(userId: number, token: string) {
+  async saveRefreshAndIP(userId: number, token: string, ip: string) {
     try {
-      const tokens = await this.prismaService.refreshToken.findMany({
-        where: {
-          userId,
-        },
-      });
-      if (tokens.length > 9) {
-        await this.prismaService.refreshToken.deleteMany({
-          where: {
-            userId,
-          },
-        });
-      }
-      await this.prismaService.refreshToken.create({
-        data: {
-          userId: userId,
-          refreshToken: token,
-        },
-      });
-      await this.prismaService.whitelistIP.create({
-        data: {
-          userId: userId,
-          ip: 'SOME IP', //TODO create ip check
-        },
-      });
+      await this.createAndCleanEntity(
+        this.prismaService.refreshToken,
+        userId,
+        9,
+        this.prismaService,
+        { refreshToken: token },
+      );
+      await this.createAndCleanEntity(
+        this.prismaService.whitelistIP,
+        userId,
+        9,
+        this.prismaService,
+        { ip },
+      );
     } catch (error) {
       throw new HttpException(
         'Internal server error',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+  async createAndCleanEntity(
+    entityType: any,
+    userId: number,
+    countLimit: number,
+    prismaService: any,
+    data: any,
+  ) {
+    const count = await entityType.count({
+      where: {
+        userId,
+      },
+    });
+    if (count > countLimit) {
+      await entityType.deleteMany({
+        where: {
+          userId,
+        },
+      });
+    }
+    await entityType.create({
+      data: {
+        userId,
+        ...data,
+      },
+    });
   }
 
   async checkRefresh(id: number, tokenFromCookie: string) {

@@ -13,6 +13,7 @@ export class AuthManageTokensController {
   ) {}
 
   @UseGuards(RefreshAuthenticationGuard)
+  //TODO: check ip
   @Get('refresh')
   async refresh(@Req() request: RequestWithUser): Promise<User> {
     const accessCookie = await this.AuthManageTokensService.getAccessToken(

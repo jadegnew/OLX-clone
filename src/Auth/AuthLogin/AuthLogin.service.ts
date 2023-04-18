@@ -13,7 +13,7 @@ export class AuthLoginService {
   async login(userData: UserDto) {
     try {
       const user = await this.userService.getByEmail(userData.email);
-      await this.verifyPassword(userData.password, user!.password);
+      await this.verifyPassword(userData.password, user.password);
       this.logger.log(`User ${user.email} logged in.`, 'AuthService');
       return user;
     } catch (error) {

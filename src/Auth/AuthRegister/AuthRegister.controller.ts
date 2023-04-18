@@ -39,6 +39,7 @@ export class AuthRegisterController {
       await this.refreshUserToken.saveRefreshAndIP(
         user.id,
         refreshToken.tokenHash,
+        req.ip,
       );
       req.res?.setHeader('Set-Cookie', [accessToken, refreshToken.cookie]);
       return user;
