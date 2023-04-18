@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from '../../User/CreateUser/CreateUser.dto';
 import RequestWithUser from '../../Interfaces/requestWithUser.interface';
-import { UserEntity } from '../../User/User/user.entity';
+import { UserEntity } from '../../User/User/User.entity';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthRegisterService } from './AuthRegister.service';
 import { RefreshUserTokenService } from '../../User/RefresfUserToken/RefreshUserToken.service';
@@ -27,7 +27,7 @@ export class AuthRegisterController {
   async register(
     @Body() body: CreateUserDto,
     @Req() req: RequestWithUser,
-  ): Promise<UserEntity | null> {
+  ): Promise<string | null> {
     const user = await this.authRegisterService.register(body);
     if (user) {
       const accessToken = await this.authManageTokensService.getAccessToken(
@@ -42,7 +42,7 @@ export class AuthRegisterController {
         req.ip,
       );
       req.res?.setHeader('Set-Cookie', [accessToken, refreshToken.cookie]);
-      return user;
+      return 'User created.';
     }
     return null;
   }

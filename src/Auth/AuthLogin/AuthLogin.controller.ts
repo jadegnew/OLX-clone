@@ -25,8 +25,7 @@ export class AuthLoginController {
   @Post('login')
   @UsePipes(new ValidationPipe({ transform: true }))
   @UseGuards(LocalAuthenticationGuard)
-  async login(@Req() req: RequestWithUser): Promise<User> {
-    //TODO get IP address and save it in db
+  async login(@Req() req: RequestWithUser): Promise<string> {
     const user = req.user;
     const accessToken = await this.authManageTokensService.getAccessToken(
       user.id,
@@ -40,6 +39,6 @@ export class AuthLoginController {
       req.ip,
     );
     req.res?.setHeader('Set-Cookie', [accessToken, refreshToken.cookie]);
-    return user;
+    return 'Logged in';
   }
 }

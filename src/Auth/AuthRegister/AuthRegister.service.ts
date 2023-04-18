@@ -18,15 +18,16 @@ export class AuthRegisterService {
         userData.password,
         +this.configService.get('SALT'),
       );
-      userData.password = passwordHash;
-      const createdUser = await this.createUserService.register(userData);
-      this.logger.log(`New user ${createdUser?.email} created.`, 'AuthService');
-      return createdUser;
+      const user = await this.createUserService.register({
+        ...userData,
+        password: passwordHash,
+      });
+      this.logger.log(`New user ${user?.email} created.`, 'AuthService');
+      return user;
     } catch (error) {
       this.logger.error('Error while creating User', 'AuthService');
       throw new HttpException(
-        //TODO make normal exceptions
-        'Error while creating User',
+        'User with this email or phone already exists',
         HttpStatus.BAD_REQUEST,
       );
     }

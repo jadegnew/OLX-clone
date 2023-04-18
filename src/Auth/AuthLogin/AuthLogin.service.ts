@@ -17,7 +17,7 @@ export class AuthLoginService {
       this.logger.log(`User ${user.email} logged in.`, 'AuthService');
       return user;
     } catch (error) {
-      this.logger.error('Error while logining.', 'AuthService');
+      this.logger.error('Error while authentication.', 'AuthService');
       throw new HttpException(
         'Wrong email or password',
         HttpStatus.BAD_REQUEST,
