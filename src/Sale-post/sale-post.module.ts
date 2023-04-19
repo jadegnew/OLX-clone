@@ -6,9 +6,10 @@ import { ConfigModule } from '@nestjs/config';
 import { Logger } from '../Logger/Logger.service';
 import { UserService } from '../User/User/User.service';
 import { AuthModule } from '../Auth/auth.module';
+import { SearchModule } from '../Search/Search.module';
 
 @Module({
-  imports: [ConfigModule, AuthModule],
+  imports: [ConfigModule, AuthModule, SearchModule],
   controllers: [SalePostController],
   providers: [SalePostService, PrismaService, Logger, UserService],
 })

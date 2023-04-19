@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
@@ -9,47 +9,39 @@ datasource db {
 }
 
 model User {
-  id Int @default(autoincrement()) @id
-  email String @unique
-  phone String @unique
-  password String
-  name String
-  salePosts SalePost[]
+  id            Int            @id @default(autoincrement())
+  email         String         @unique
+  phone         String         @unique
+  password      String
+  name          String
   refreshTokens RefreshToken[]
-  whitelistIP WhitelistIP[]
+  salePosts     SalePost[]
+  whitelistIP   WhitelistIP[]
 }
 
 model RefreshToken {
-  id Int @default(autoincrement()) @id
-  userId Int
-  User User @relation(fields: [userId], references: [id])
+  id           Int    @id @default(autoincrement())
+  userId       Int
   refreshToken String
+  User         User   @relation(fields: [userId], references: [id])
 }
 
 model WhitelistIP {
-  id Int @default(autoincrement()) @id
+  id     Int    @id @default(autoincrement())
   userId Int
-  User User @relation(fields: [userId], references: [id])
-  ip String
+  ip     String
+  User   User   @relation(fields: [userId], references: [id])
 }
 
 model SalePost {
-  id Int @default(autoincrement()) @id
-  userId Int
-  User User @relation(fields: [userId], references: [id])
-  title String @db.VarChar(100)
+  id          Int     @id @default(autoincrement())
+  userId      Int
+  title       String  @db.VarChar(100)
   description String
-  price Int //price in USD
-  viewsCount Int @default(0)
-  imageUrl String? //TODO make array 
-  //TODO add tags
-  location String @db.VarChar(100)
-  phone String
+  location    String  @db.VarChar(100)
+  phone       String
+  price       Int
+  viewsCount  Int     @default(0)
+  imageUrl    String?
+  User        User    @relation(fields: [userId], references: [id])
 }
-
-// model ImageUrls {
-//   id Int @default(autoincrement()) @id
-//   postId Int
-//   SalePost SalePost @relation(fields: [postId], references: [id])
-//   url String
-// }

@@ -3,11 +3,13 @@ import { CreateSalePostDto } from './DTOS/create-sale-post.dto';
 import { UpdateSalePostDto } from './DTOS/update-sale-post.dto';
 import { PrismaService } from 'src/Database/prisma.service';
 import { Logger } from '../Logger/Logger.service';
+import { SearchService } from '../Search/Search.service';
 
 @Injectable()
 export class SalePostService {
   constructor(
     private readonly prismaService: PrismaService,
+    private readonly searchService: SearchService,
     private readonly logger: Logger,
   ) {}
   //TODO complete requests
@@ -30,6 +32,7 @@ export class SalePostService {
           userId,
         },
       });
+      await this.searchService.indexPost(salepost);
       this.logger.log(`SalePost with id ${salepost.id} created`);
       return salepost;
     } catch (e) {
@@ -56,11 +59,17 @@ export class SalePostService {
 
   //TODO rewrite logic. mb elastic search || full text search in db?
   async findByTitle(title: string) {
+    const results = await this.searchService.search(title);
+    if (!results.length || typeof results == 'undefined') return [];
+    const ids = results
+      .map((result) => {
+        return +result.id;
+      })
+      .filter((id) => id !== undefined);
+    if (!ids.length) return [];
     return this.prismaService.salePost.findMany({
       where: {
-        title: {
-          contains: title,
-        },
+        id: { in: ids as number[] },
       },
     });
   }
@@ -75,6 +84,7 @@ export class SalePostService {
           ...updateSalePostDto,
         },
       });
+      await this.searchService.update(updatedPost);
       this.logger.log(`SalePost with id ${updatedPost.id} updated`);
       return updatedPost;
     } catch (e) {
@@ -84,15 +94,19 @@ export class SalePostService {
 
   async remove(id: number) {
     try {
+      const post = await this.findOne(id);
+      if (!post) return 'Post not found';
       const deletedPost = await this.prismaService.salePost.delete({
         where: {
           id,
         },
       });
+      await this.searchService.remove(id);
       this.logger.log(`SalePost with id ${deletedPost.id} deleted`);
-      return deletedPost;
+      return 'Post deleted!';
     } catch (e) {
       this.logger.error('Error while deleting salepost', e);
+      return 'Error while deleting post';
     }
   }
 }
