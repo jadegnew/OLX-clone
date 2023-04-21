@@ -24,11 +24,10 @@ graph TD;
     /auth-->/register_'POST'
     /auth-->/login_'POST'
     /auth-->/refresh_'POST'
-    /sale-post-->/all_'GET'
+    /sale-post-->/search?=searchTitle'GET'
     /sale-post-->/create_'POST'
     /sale-post-->/update:id_'PATCH'
     /sale-post-->/delete:id_'DELETE'
-    /sale-post-->/s:title_'GET'
     /sale-post-->/:id_'GET'
 ```
 
