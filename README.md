@@ -19,7 +19,11 @@ graph TD;
     /-->/api;
     /-->/user;
     /-->/auth;
+    /-->/api;
     /-->/sale-post;
+    /-->/sms;
+    /sms-->/init-verify;
+    /sms-->/verify;
     /user-->/myaccount_'GET'
     /auth-->/register_'POST'
     /auth-->/login_'POST'
@@ -90,5 +94,13 @@ graph TD;
 	?"location":  "Kharkiv",
 	?"phone":  "0987654321",
 	?"price":  500
+}
+```
+
+### SMS
+
+```go
+{
+	"code": "Verification code from SMS"
 }
 ```
