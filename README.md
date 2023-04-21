@@ -3,6 +3,25 @@
 My attempt to recreate the basic functionality of https://www.olx.ua/uk/ on Nest.js and PostgreSQL.
 Development in progress, functionality will be added over time.
 
+## Main features
+
+- User account creation ⬇
+---
+Added the ability to confirm the account by [phone number](https://www.twilio.com/en-us) to access the creation and work with ads for sale.
+
+- Multi-session protection using [jwt-tokens](https://jwt.io) ⬇
+---
+Both access-token and refresh-tokens are used to protect sessions (up to 10 tokens per account), as well as IP whitelisting.
+
+- Working with sales ads ⬇
+---
+Implemented the basic CRUD functionality to work with ads for sale.
+
+- Full-featured search engine ⬇
+---
+With the help of [ElasticSearch](https://www.elastic.co) implemented a full-fledged search engine on a database of ads for sale. Find what you need even with typos!
+
+
 ## .env file
 
 | DATA               | VALUE                           |
