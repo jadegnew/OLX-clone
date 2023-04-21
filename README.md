@@ -11,6 +11,9 @@ Development in progress, functionality will be added over time.
 | JWT_ACCESS_SECRET  | "your jwt access token secret"  |
 | JWT_REFRESH_SECRET | "your jwt refresh token secret" |
 | SALT               | "your salt"                     |
+| TWILIO_ACCOUNT_SID | "your twilio account SID"       |
+| TWILIO_AUTH_TOKEN  | "your twilio account token"     |
+| TWILIO_SERVICE_SID | "your twilio service SID"       |
 
 ## Endpoints and request examples
 
