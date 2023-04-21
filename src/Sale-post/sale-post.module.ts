@@ -7,10 +7,17 @@ import { Logger } from '../Logger/Logger.service';
 import { UserService } from '../User/User/User.service';
 import { AuthModule } from '../Auth/auth.module';
 import { SearchModule } from '../Search/Search.module';
+import { PhoneStrategy } from './Strategies/PhoneStrategy/phone.strategy';
 
 @Module({
   imports: [ConfigModule, AuthModule, SearchModule],
   controllers: [SalePostController],
-  providers: [SalePostService, PrismaService, Logger, UserService],
+  providers: [
+    SalePostService,
+    PrismaService,
+    Logger,
+    UserService,
+    PhoneStrategy,
+  ],
 })
 export class SalePostModule {}

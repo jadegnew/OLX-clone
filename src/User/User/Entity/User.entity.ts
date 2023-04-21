@@ -4,4 +4,5 @@ export class UserEntity {
   phone: string;
   name: string;
   password: string;
+  phoneValid: boolean;
 }

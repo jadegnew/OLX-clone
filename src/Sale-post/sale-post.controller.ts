@@ -17,6 +17,7 @@ import { UpdateSalePostDto } from './DTOS/update-sale-post.dto';
 import RequestWithUser from 'src/Interfaces/requestWithUser.interface';
 import { AccessAuthenticationGuard } from 'src/Auth/Strategies/AccessStrategy/access.guard';
 import { ApiTags } from '@nestjs/swagger';
+import { PhoneGuard } from './Strategies/PhoneStrategy/phone.guard';
 
 @ApiTags('SalePost')
 @Controller('Sale-post')
@@ -24,6 +25,7 @@ export class SalePostController {
   constructor(private readonly salePostService: SalePostService) {}
   @Post('create')
   @UseGuards(AccessAuthenticationGuard)
+  @UseGuards(PhoneGuard)
   async create(
     @Req() req: RequestWithUser,
     @Body() createSalePostDto: CreateSalePostDto,
@@ -46,6 +48,8 @@ export class SalePostController {
   }
 
   @Patch('update/:id')
+  @UseGuards(AccessAuthenticationGuard)
+  @UseGuards(PhoneGuard)
   async update(
     @Param('id') id: string,
     @Body() updateSalePostDto: UpdateSalePostDto,
@@ -54,6 +58,8 @@ export class SalePostController {
   }
 
   @Delete('delete/:id')
+  @UseGuards(AccessAuthenticationGuard)
+  @UseGuards(PhoneGuard)
   async remove(@Param('id') id: string) {
     return this.salePostService.remove(+id);
   }

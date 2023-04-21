@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../Database/prisma.service';
-import { compare } from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -29,5 +28,25 @@ export class UserService {
       `User with email ${email} not found`,
       HttpStatus.NOT_FOUND,
     );
+  }
+
+  async checkIfPhoneVerified(userId: number) {
+    const user = await this.prismaService.user.findFirst({
+      where: {
+        id: userId,
+      },
+    });
+    return user && user.phoneValid === true;
+  }
+
+  async markPhoneAsVerified(userId: number) {
+    await this.prismaService.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        phoneValid: true,
+      },
+    });
   }
 }

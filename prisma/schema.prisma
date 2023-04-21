@@ -14,6 +14,8 @@ model User {
   phone         String         @unique
   password      String
   name          String
+  emailValid    Boolean        @default(false)
+  phoneValid    Boolean        @default(false)
   refreshTokens RefreshToken[]
   salePosts     SalePost[]
   whitelistIP   WhitelistIP[]

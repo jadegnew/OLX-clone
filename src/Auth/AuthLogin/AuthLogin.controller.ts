@@ -29,9 +29,11 @@ export class AuthLoginController {
     const user = req.user;
     const accessToken = await this.authManageTokensService.getAccessToken(
       user.id,
+      user.phoneValid,
     );
     const refreshToken = await this.authManageTokensService.getRefreshToken(
       user.id,
+      user.phoneValid,
     );
     await this.refreshUserTokenService.saveRefreshAndIP(
       user.id,

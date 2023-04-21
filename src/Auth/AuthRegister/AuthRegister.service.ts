@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from '../../User/CreateUser/CreateUser.dto';
-import { hash } from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
+import { hash } from 'bcrypt';
 import { CreateUserService } from '../../User/CreateUser/CreateUser.service';
 import { Logger } from '../../Logger/Logger.service';
 

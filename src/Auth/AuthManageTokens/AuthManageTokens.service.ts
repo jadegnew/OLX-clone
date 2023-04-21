@@ -12,10 +12,11 @@ export class AuthManageTokensService {
     private readonly configService: ConfigService,
     private readonly logger: Logger,
   ) {}
-  async getAccessToken(userId: number) {
+  async getAccessToken(userId: number, phoneValid: boolean) {
     const iat = Date.now() / 1000;
     const payload: TokenPayload = {
       userId,
+      phoneValid,
       iat,
     };
     const token = await this.jwtService.signAsync(payload, {
@@ -26,10 +27,11 @@ export class AuthManageTokensService {
     return `Authentication=${token}; HttpOnly; Path=/; Max-Age=15m`;
   }
 
-  async getRefreshToken(userId: number) {
+  async getRefreshToken(userId: number, phoneValid: boolean) {
     const iat = Date.now() / 1000;
     const payload: TokenPayload = {
       userId,
+      phoneValid,
       iat,
     };
     const token = await this.jwtService.signAsync(payload, {

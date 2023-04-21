@@ -18,6 +18,7 @@ export class AuthManageTokensController {
   async refresh(@Req() request: RequestWithUser): Promise<User> {
     const accessCookie = await this.AuthManageTokensService.getAccessToken(
       request.user.id,
+      request.user.phoneValid,
     );
     request.res?.setHeader('Set-Cookie', accessCookie);
     return request.user;
