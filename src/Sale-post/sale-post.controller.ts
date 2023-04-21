@@ -9,6 +9,7 @@ import {
   Req,
   UseGuards,
   UploadedFile,
+  Query,
 } from '@nestjs/common';
 import { SalePostService } from './sale-post.service';
 import { CreateSalePostDto } from './DTOS/create-sale-post.dto';
@@ -16,9 +17,7 @@ import { UpdateSalePostDto } from './DTOS/update-sale-post.dto';
 import RequestWithUser from 'src/Interfaces/requestWithUser.interface';
 import { AccessAuthenticationGuard } from 'src/Auth/Strategies/AccessStrategy/access.guard';
 import { ApiTags } from '@nestjs/swagger';
-import { Request } from 'express';
 
-//TODO save files in folder
 @ApiTags('SalePost')
 @Controller('Sale-post')
 export class SalePostController {
@@ -33,19 +32,17 @@ export class SalePostController {
     return this.salePostService.create(createSalePostDto, req.user.id, file);
   }
 
-  @Get('all')
-  async findAll(@Req() req: Request) {
+  @Get()
+  async getPosts(@Query('search') search: string) {
+    if (search) {
+      return this.salePostService.findByTitle(search);
+    }
     return this.salePostService.findAll();
   }
 
   @Get(':id')
-  async findOn(@Param('id') id: string) {
-    return this.salePostService.findOne(+id);
-  }
-
-  @Get('s/:title')
-  async findByTitle(@Param('title') title: string) {
-    return this.salePostService.findByTitle(title);
+  async getOneById(@Param('id') id: string) {
+    return this.salePostService.getOneById(+id);
   }
 
   @Patch('update/:id')

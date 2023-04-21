@@ -44,7 +44,7 @@ export class SalePostService {
     return this.prismaService.salePost.findMany({ take: 50 });
   }
 
-  async findOne(id: number) {
+  async getOneById(id: number) {
     return this.prismaService.salePost.update({
       where: {
         id,
@@ -57,7 +57,6 @@ export class SalePostService {
     });
   }
 
-  //TODO rewrite logic. mb elastic search || full text search in db?
   async findByTitle(title: string) {
     const results = await this.searchService.search(title);
     if (!results.length || typeof results == 'undefined') return [];
@@ -94,7 +93,7 @@ export class SalePostService {
 
   async remove(id: number) {
     try {
-      const post = await this.findOne(id);
+      const post = await this.getOneById(id);
       if (!post) return 'Post not found';
       const deletedPost = await this.prismaService.salePost.delete({
         where: {
